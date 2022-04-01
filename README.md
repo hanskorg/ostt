@@ -17,7 +17,7 @@
 
 ### 1、安装
 #### 选择版本
-[osstransfer.tar.gz](https://github.com/hanskorg/strorage-transfer/releases)
+[osstransfer.tar.gz](https://github.com/hanskorg/ostt/releases)
 ##### 1、with jre版本
 java version 1.8.0_131
 ##### 2、without jre版本

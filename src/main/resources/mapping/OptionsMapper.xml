@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.hansk.tools.transfer.dao.OptionsMapper" >
+
+    <select id="getValue" resultType="String">
+        SELECT option_value FROM options WHERE option_key = #{option_key} limit 1
+    </select>
+
+    <insert id="setValue">
+        REPLACE INTO options (option_key,option_value) VALUES (
+          #{option_key},
+          #{option_value}
+        )
+    </insert>
+</mapper>

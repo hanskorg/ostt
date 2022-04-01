@@ -1,0 +1,70 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.hansk.tools.transfer.dao.ObjectsMapper" >
+    <resultMap id="storageObject" type="org.hansk.tools.transfer.domain.StorageObject">
+        <result property="id" column="id"/>
+        <result property="provider" column="provider"/>
+        <result property="bucketName" column="bucket"/>
+        <result property="objectKey" column="object_key"/>
+        <result property="fileMD5" column="file_md5"/>
+        <result property="expires" column="expires"/>
+        <result property="lastCheckStatus" column="last_check_status"/>
+        <result property="startTime" column="start_time"/>
+        <result property="lastCheckTime" column="last_check_time"/>
+        <result property="metaData" column="meta_data" typeHandler="org.hansk.tools.transfer.domain.JSONTypeHandler"/>
+    </resultMap>
+    <select id="findObject" resultMap="storageObject">
+        SELECT * FROM object_list WHERE
+        <if test="provider != null">
+            provider = #{provider} AND
+        </if>
+        <if test="bucket != null">
+            bucket = #{bucket} AND
+        </if>
+        1 = 1
+        LIMIT  #{start},#{limit}
+    </select>
+    <select id="findByStatus" resultMap="storageObject">
+        SELECT * FROM object_list WHERE
+        <if test="provider != null">
+            provider = #{provider} AND
+        </if>
+        <if test="bucket != null">
+            bucket = #{bucket} AND
+        </if>
+        last_check_status = #{status}
+        LIMIT  #{start},#{limit}
+    </select>
+    <update id="updateStatus" >
+        UPDATE object_list SET last_check_status = #{status} WHERE id = #{id}
+    </update>
+    <insert id="insertAll">
+         INSERT INTO object_list (provider, bucket, object_key, object_size, file_md5, expires, last_check_status, start_time, last_check_time)
+         VALUES
+        <foreach collection="recordList" index="index" item="record" separator=",">
+            (#{record.provider,jdbcType=VARCHAR},
+            #{record.bucketName,jdbcType=VARCHAR},
+            #{record.objectKey,jdbcType=VARCHAR},
+            #{record.size,jdbcType=BIGINT},
+            #{record.fileMD5,jdbcType=VARCHAR},
+            #{record.expires,jdbcType=TIMESTAMP},
+            #{record.lastCheckStatus,jdbcType=TINYINT},
+            #{record.startTime,jdbcType=TIMESTAMP},
+            #{record.lastCheckTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+    <insert id="insert">
+        INSERT INTO object_list (provider, bucket, object_key, object_size, file_md5, expires, last_check_status, start_time, last_check_time, meta_data)
+        VALUES
+            (#{record.provider,jdbcType=VARCHAR},
+            #{record.bucketName,jdbcType=VARCHAR},
+            #{record.objectKey,jdbcType=VARCHAR},
+            #{record.size,jdbcType=BIGINT},
+            #{record.fileMD5,jdbcType=VARCHAR},
+            #{record.expires,jdbcType=TIMESTAMP},
+            #{record.lastCheckStatus,jdbcType=TINYINT},
+            #{record.startTime,jdbcType=TIMESTAMP},
+            #{record.lastCheckTime,jdbcType=TIMESTAMP},
+            #{record.metaDataString,jdbcType=VARCHAR})
+    </insert>
+</mapper>

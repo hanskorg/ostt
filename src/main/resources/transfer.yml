@@ -1,0 +1,56 @@
+transfer: #迁移相关相关配置
+  # 对象存储 ak/sk 配置
+  qiniu:
+    access_key: access_key
+    secret_key: access_key
+  cos:
+    secret_id: secret_id
+    secret_key: secret_key
+    app_id: app_id
+    region: ap-beijing
+
+
+  #需要迁移bucket列表,可配置多项
+  buckets:
+    -
+      #源存储
+      originStorage: oss
+      #源存储Bucket
+      originBucket:
+      #源存储所在区域，COS有效，默认值transfer.cos.region
+      originRegion:
+      #源存储Endpoint，OSS WOS BOS有效，默认值transfer.oss.end_point
+      originEndPoint: http://oss-cn-beijing.aliyuncs.com
+      #源存储加速域名，七牛有效，默认值bucket域名列表中任意一个
+      originCDNDomain: cdn.qiniu.domain
+      #对象前缀,空遍历完整bucket
+      prefix:
+        - v
+        - test
+      #目标存储，默认transfer.target
+      targetStorage: cos
+      #目标bucket，默认与源相同
+      targetBucket:
+      #目标存储所在区域，COS有效，默认值transfer.cos.region
+      targetRegion: ap-beijing
+      #源存储Endpoint，OSS有效，默认值transfer.oss.end_point
+      targetEndPoint:
+      #暂时无效
+      targetCDNDomain:
+    -
+      originStorage: oss
+      originBucket:
+      targetBucket:
+
+  #默认迁移存储目标,数组，当transfer.bucket[].targetStorage 空时，取细致
+  target:
+    - cos
+
+  #最小传输线程
+  min_trans_thread: 2
+  #最大传输线程
+  max_trans_thread: 100
+  #检查对象存在的最大线程数
+  max_check_thread: 10
+  #迁移transferBefore时间点之前的对象
+  transferBefore: 2022-10-19 00:00:00
